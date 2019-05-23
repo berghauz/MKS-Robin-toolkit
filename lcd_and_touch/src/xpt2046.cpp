@@ -2,12 +2,13 @@
 #include <SPI.h>
 
 #include "xpt2046.h"
+#include "board.h"
 
 static SPISettings spiConfig;
 
 void initTouch(void) {
-  pinMode(PB1, OUTPUT);
-  digitalWrite(PB1, HIGH);
+  pinMode(TOUCH_CS_PIN, OUTPUT);
+  digitalWrite(TOUCH_CS_PIN, HIGH);
 
   SPI.setModule(2);
   spiConfig = SPISettings(XPT2046_SPI_CLOCK, MSBFIRST, SPI_MODE0);
@@ -16,7 +17,7 @@ void initTouch(void) {
 uint16_t getTouchCoordinate(uint8_t coordinate) {
     coordinate |= XPT2046_CONTROL | XPT2046_DFR_MODE;
 
-    digitalWrite(PB1, LOW);
+    digitalWrite(TOUCH_CS_PIN, LOW);
     SPI.beginTransaction(spiConfig);
 
     uint16_t data[3], delta[3];
@@ -31,7 +32,7 @@ uint16_t getTouchCoordinate(uint8_t coordinate) {
     SPI.transfer(0x00);
 
     SPI.endTransaction();
-    digitalWrite(PB1, HIGH);
+    digitalWrite(TOUCH_CS_PIN, HIGH);
 
     delta[0] = data[0] > data[1] ? data[0] - data [1] : data[1] - data [0];
     delta[1] = data[0] > data[2] ? data[0] - data [2] : data[2] - data [0];
