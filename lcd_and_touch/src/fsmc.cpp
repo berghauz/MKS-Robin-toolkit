@@ -26,11 +26,21 @@ void LCD_IO_Init(void) {
   gpio_set_mode(GPIOE, 14, GPIO_AF_OUTPUT_PP);
   gpio_set_mode(GPIOE, 15, GPIO_AF_OUTPUT_PP);
 
+#ifdef MKS_ROBIN
   gpio_set_mode(GPIOD,  4, GPIO_AF_OUTPUT_PP);   // NOE
   gpio_set_mode(GPIOD,  5, GPIO_AF_OUTPUT_PP);   // NWE
 
   gpio_set_mode(GPIOG, 12, GPIO_AF_OUTPUT_PP);   // NE4
   gpio_set_mode(GPIOF,  0, GPIO_AF_OUTPUT_PP);   // A0
+#endif
+
+#ifdef MKS_ROBIN_MINI
+  gpio_set_mode(GPIOD,  4, GPIO_AF_OUTPUT_PP);   // NOE
+  gpio_set_mode(GPIOD,  5, GPIO_AF_OUTPUT_PP);   // NWE
+
+  gpio_set_mode(GPIOD,  7, GPIO_AF_OUTPUT_PP);   // NE1
+  gpio_set_mode(GPIOD, 11, GPIO_AF_OUTPUT_PP);   // A16
+#endif
 
   FSMC_NOR_PSRAM4_BASE->BCR = FSMC_BCR_WREN | FSMC_BCR_MTYP_SRAM | FSMC_BCR_MWID_16BITS | FSMC_BCR_MBKEN;
   FSMC_NOR_PSRAM4_BASE->BTR = (FSMC_DATA_SETUP_TIME << 8) | FSMC_ADDRESS_SETUP_TIME;

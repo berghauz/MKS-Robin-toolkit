@@ -3,6 +3,7 @@
 #include "libmaple/gpio.h"
 #include "libmaple/dma.h"
 #include "stdint.h"
+#include "board.h"
 
 #define __IO volatile
 #define __ASM __asm
@@ -32,16 +33,23 @@ static inline void dma_set_num_transfers32(dma_dev *dev, dma_channel channel, ui
 #define FSMC_D13  PD8
 #define FSMC_D14  PD9
 #define FSMC_D15  PD10
-#define FSMC_NOE  PD4
-#define FSMC_NWE  PD5
 
-#define FSMC_NE4  PG12
-#define FSMC_A0   PF0
+#ifdef MKS_ROBIN
+  #define FSMC_NOE  PD4
+  #define FSMC_NWE  PD5
+  #define FSMC_NE4  PG12
+  #define FSMC_A0   PF0
+  #define LCD       ((LCD_CONTROLLER_TypeDef *) (0x6C000000 | 0x00000000)) // FSMC_NE4 FSMC_A0
+#endif
 
-#define LCD_BACKLIGHT_PIN   PG11
-#define LCD_RESET_PIN       PF6
+#ifdef MKS_ROBIN_MINI
+  #define FSMC_NOE  PD4
+  #define FSMC_NWE  PD5
+  #define FSMC_NE1  PD7
+  #define FSMC_A16  PD11
+  #define LCD	    ((LCD_CONTROLLER_TypeDef *) (0x60000000 | 0x0001FFFE)) // FSMC_NE1 FSMC_A16
+#endif
 
-#define LCD       ((LCD_CONTROLLER_TypeDef *) (0x6C000000 | 0x00000000)) // FSMC_NE4 FSMC_A0
 
 typedef struct {
   __IO uint16_t REG;

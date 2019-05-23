@@ -5,13 +5,16 @@
 
 #include "lcd.h"
 #include "xpt2046.h"
+#include "board.h"
 
 uint16_t reg00, lcdId;
 
 int16_t xCalibration, yCalibration, xOffset, yOffset;
 
 uint32_t backlightTimeout;
-uint32_t ledTimeout = 0;
+#ifdef MKS_ROBIN
+  uint32_t ledTimeout = 0;
+#endif
 uint16_t color = WHITE, bgColor = BLACK;
 char text[41];
 char controller[8];
@@ -248,12 +251,14 @@ void setup() {
 void loop() {
   uint16_t x, y;
 
+#ifdef MKS_ROBIN
   if (ledTimeout < millis()) {
-    digitalWrite(PB2, LOW);
+    digitalWrite(LED_PIN, LOW);
     ledTimeout = millis() + 2000;
   } else if (ledTimeout < millis() + 1000) {
-    digitalWrite(PB2, HIGH);
+    digitalWrite(LED_PIN, HIGH);
   }
+#endif
 
   if (backlightTimeout < millis()) {
     LCD_BacklightOff();
